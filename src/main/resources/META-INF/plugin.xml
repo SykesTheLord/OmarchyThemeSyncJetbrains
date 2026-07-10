@@ -1,0 +1,32 @@
+<idea-plugin>
+    <id>dev.sykes.omarchysync</id>
+    <name>Omarchy Theme Sync</name>
+    <vendor email="jacob@sykes-sec.com">Sykes</vendor>
+
+    <description><![CDATA[
+        Keeps JetBrains IDE appearance in sync with the active <b>Omarchy</b> theme.
+        <br/><br/>
+        When you switch themes with <code>omarchy-theme-set</code>, this plugin reads
+        <code>~/.config/omarchy/current/theme/colors.toml</code> and reskins the IDE:
+        it regenerates the editor color scheme from the theme's ANSI palette and retints the
+        IDE UI (light/dark plus common surfaces). It validates that the machine is actually
+        running Omarchy and stays completely dormant otherwise.
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceImplementation="dev.sykes.omarchysync.settings.OmarchySyncSettings"/>
+        <applicationService serviceImplementation="dev.sykes.omarchysync.watch.OmarchyThemeWatcher"/>
+
+        <postStartupActivity implementation="dev.sykes.omarchysync.OmarchyStartupActivity"/>
+
+        <applicationConfigurable
+            parentId="appearance"
+            instance="dev.sykes.omarchysync.settings.OmarchySyncConfigurable"
+            id="dev.sykes.omarchysync.settings"
+            displayName="Omarchy Theme Sync"/>
+
+        <notificationGroup id="Omarchy Theme Sync" displayType="BALLOON"/>
+    </extensions>
+</idea-plugin>
